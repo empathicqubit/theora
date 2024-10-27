@@ -1,5 +1,13 @@
 # Xiph.org Foundation's libtheora
 
+### Notes about this fork (empathicqubit)
+
+I changed all references to _ogg_alloc/free to _theora_alloc/free
+The difference is that the latter is intended to point to external
+memory for video decoding on embedded devices. Building against an
+unmodified version of libogg will fail as it does not contain these
+definitions.
+
 ### What is Theora?
 
 Theora was Xiph.Org's first publicly released video codec, intended

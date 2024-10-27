@@ -396,7 +396,7 @@ int oc_huff_trees_unpack(oc_pack_buf *_opb,
     /*This should never happen; if it does it means you set OC_HUFF_SLUSH or
        OC_ROOT_HUFF_SLUSH too large.*/
     if(size>32767)return TH_EIMPL;
-    tree=(ogg_int16_t *)_ogg_malloc(size*sizeof(*tree));
+    tree=(ogg_int16_t *)_theora_malloc(size*sizeof(*tree));
     if(tree==NULL)return TH_EFAULT;
     /*Construct the collapsed the tree.*/
     oc_huff_tree_collapse(tree,tokens,ntokens);
@@ -443,9 +443,9 @@ int oc_huff_trees_copy(ogg_int16_t *_dst[TH_NHUFFMAN_TABLES],
     size_t size;
     size=oc_huff_tree_size(_src[i],0);
     total+=size;
-    _dst[i]=(ogg_int16_t *)_ogg_malloc(size*sizeof(*_dst[i]));
+    _dst[i]=(ogg_int16_t *)_theora_malloc(size*sizeof(*_dst[i]));
     if(_dst[i]==NULL){
-      while(i-->0)_ogg_free(_dst[i]);
+      while(i-->0)_theora_free(_dst[i]);
       return TH_EFAULT;
     }
     memcpy(_dst[i],_src[i],size*sizeof(*_dst[i]));
@@ -457,7 +457,7 @@ int oc_huff_trees_copy(ogg_int16_t *_dst[TH_NHUFFMAN_TABLES],
   _nodes: The array of trees to free.*/
 void oc_huff_trees_clear(ogg_int16_t *_nodes[TH_NHUFFMAN_TABLES]){
   int i;
-  for(i=0;i<TH_NHUFFMAN_TABLES;i++)_ogg_free(_nodes[i]);
+  for(i=0;i<TH_NHUFFMAN_TABLES;i++)_theora_free(_nodes[i]);
 }
 
 

@@ -493,17 +493,17 @@ static int oc_state_frarray_init(oc_theora_state *_state){
   _state->fplanes[2].sboffset=ysbs+csbs;
   _state->fplanes[1].nsbs=_state->fplanes[2].nsbs=csbs;
   _state->nfrags=nfrags;
-  _state->frags=_ogg_calloc(nfrags,sizeof(*_state->frags));
-  _state->frag_mvs=_ogg_malloc(nfrags*sizeof(*_state->frag_mvs));
+  _state->frags=_theora_calloc(nfrags,sizeof(*_state->frags));
+  _state->frag_mvs=_theora_malloc(nfrags*sizeof(*_state->frag_mvs));
   _state->nsbs=nsbs;
-  _state->sb_maps=_ogg_malloc(nsbs*sizeof(*_state->sb_maps));
-  _state->sb_flags=_ogg_calloc(nsbs,sizeof(*_state->sb_flags));
+  _state->sb_maps=_theora_malloc(nsbs*sizeof(*_state->sb_maps));
+  _state->sb_flags=_theora_calloc(nsbs,sizeof(*_state->sb_flags));
   _state->nhmbs=yhsbs<<1;
   _state->nvmbs=yvsbs<<1;
   _state->nmbs=nmbs;
-  _state->mb_maps=_ogg_calloc(nmbs,sizeof(*_state->mb_maps));
-  _state->mb_modes=_ogg_calloc(nmbs,sizeof(*_state->mb_modes));
-  _state->coded_fragis=_ogg_malloc(nfrags*sizeof(*_state->coded_fragis));
+  _state->mb_maps=_theora_calloc(nmbs,sizeof(*_state->mb_maps));
+  _state->mb_modes=_theora_calloc(nmbs,sizeof(*_state->mb_modes));
+  _state->coded_fragis=_theora_malloc(nfrags*sizeof(*_state->coded_fragis));
   if(_state->frags==NULL||_state->frag_mvs==NULL||_state->sb_maps==NULL||
    _state->sb_flags==NULL||_state->mb_maps==NULL||_state->mb_modes==NULL||
    _state->coded_fragis==NULL){
@@ -526,13 +526,13 @@ static int oc_state_frarray_init(oc_theora_state *_state){
 }
 
 static void oc_state_frarray_clear(oc_theora_state *_state){
-  _ogg_free(_state->coded_fragis);
-  _ogg_free(_state->mb_modes);
-  _ogg_free(_state->mb_maps);
-  _ogg_free(_state->sb_flags);
-  _ogg_free(_state->sb_maps);
-  _ogg_free(_state->frag_mvs);
-  _ogg_free(_state->frags);
+  _theora_free(_state->coded_fragis);
+  _theora_free(_state->mb_modes);
+  _theora_free(_state->mb_maps);
+  _theora_free(_state->sb_flags);
+  _theora_free(_state->sb_maps);
+  _theora_free(_state->frag_mvs);
+  _theora_free(_state->frags);
 }
 
 
@@ -590,9 +590,9 @@ static int oc_state_ref_bufs_init(oc_theora_state *_state,int _nrefs){
   }
   ref_frame_data=oc_aligned_malloc(ref_frame_data_sz,16);
   frag_buf_offs=_state->frag_buf_offs=
-   _ogg_malloc(_state->nfrags*sizeof(*frag_buf_offs));
+   _theora_malloc(_state->nfrags*sizeof(*frag_buf_offs));
   if(ref_frame_data==NULL||frag_buf_offs==NULL){
-    _ogg_free(frag_buf_offs);
+    _theora_free(frag_buf_offs);
     oc_aligned_free(ref_frame_data);
     return TH_EFAULT;
   }
@@ -671,7 +671,7 @@ static int oc_state_ref_bufs_init(oc_theora_state *_state,int _nrefs){
 }
 
 static void oc_state_ref_bufs_clear(oc_theora_state *_state){
-  _ogg_free(_state->frag_buf_offs);
+  _theora_free(_state->frag_buf_offs);
   oc_aligned_free(_state->ref_frame_handle);
 }
 

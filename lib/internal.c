@@ -100,7 +100,7 @@ int oc_ilog(unsigned _v){
 void *oc_aligned_malloc(size_t _sz,size_t _align){
   unsigned char *p;
   if(_align-1>UCHAR_MAX||(_align&_align-1)||_sz>~(size_t)0-_align)return NULL;
-  p=(unsigned char *)_ogg_malloc(_sz+_align);
+  p=(unsigned char *)_theora_malloc(_sz+_align);
   if(p!=NULL){
     int offs;
     offs=((p-(unsigned char *)0)-1&_align-1);
@@ -116,7 +116,7 @@ void oc_aligned_free(void *_ptr){
   if(p!=NULL){
     int offs;
     offs=*--p;
-    _ogg_free(p-offs);
+    _theora_free(p-offs);
   }
 }
 
@@ -130,7 +130,7 @@ void **oc_malloc_2d(size_t _height,size_t _width,size_t _sz){
   rowsz=_sz*_width;
   datsz=rowsz*_height;
   /*Alloc array and row pointers.*/
-  ret=(char *)_ogg_malloc(datsz+colsz);
+  ret=(char *)_theora_malloc(datsz+colsz);
   /*Initialize the array.*/
   if(ret!=NULL){
     size_t   i;
@@ -152,7 +152,7 @@ void **oc_calloc_2d(size_t _height,size_t _width,size_t _sz){
   rowsz=_sz*_width;
   datsz=rowsz*_height;
   /*Alloc array and row pointers.*/
-  ret=(char *)_ogg_calloc(datsz+colsz,1);
+  ret=(char *)_theora_calloc(datsz+colsz,1);
   /*Initialize the array.*/
   if(ret!=NULL){
     size_t   i;
@@ -166,7 +166,7 @@ void **oc_calloc_2d(size_t _height,size_t _width,size_t _sz){
 }
 
 void oc_free_2d(void *_ptr){
-  _ogg_free(_ptr);
+  _theora_free(_ptr);
 }
 
 /*Fills in a Y'CbCr buffer with a pointer to the image data in the first

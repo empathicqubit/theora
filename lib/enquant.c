@@ -50,7 +50,7 @@ int oc_quant_params_clone(th_quant_info *_dst,const th_quant_info *_src){
     }
     else{
       int *sizes;
-      sizes=(int *)_ogg_malloc(nranges*sizeof(*sizes));
+      sizes=(int *)_theora_malloc(nranges*sizeof(*sizes));
       /*Note: The caller is responsible for cleaning up any partially
          constructed qinfo.*/
       if(sizes==NULL)return TH_EFAULT;
@@ -69,7 +69,7 @@ int oc_quant_params_clone(th_quant_info *_dst,const th_quant_info *_src){
     }
     else{
       th_quant_base *base_matrices;
-      base_matrices=(th_quant_base *)_ogg_malloc(
+      base_matrices=(th_quant_base *)_theora_malloc(
        (nranges+1)*sizeof(*base_matrices));
       /*Note: The caller is responsible for cleaning up any partially
          constructed qinfo.*/

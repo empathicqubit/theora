@@ -48,7 +48,7 @@ int theora_encode_init(theora_state *_te,theora_info *_ci){
      freed, the info struct goes with it.
     This avoids having to figure out whether or not we need to free the info
      struct in either theora_info_clear() or theora_clear().*/
-  apiinfo=(th_api_info *)_ogg_malloc(sizeof(*apiinfo));
+  apiinfo=(th_api_info *)_theora_malloc(sizeof(*apiinfo));
   if(apiinfo==NULL)return TH_EFAULT;
   /*Make our own copy of the info struct, since its lifetime should be
      independent of the one we were passed in.*/
@@ -56,7 +56,7 @@ int theora_encode_init(theora_state *_te,theora_info *_ci){
   oc_theora_info2th_info(&info,_ci);
   apiinfo->api.encode=th_encode_alloc(&info);
   if(apiinfo->api.encode==NULL){
-    _ogg_free(apiinfo);
+    _theora_free(apiinfo);
     return OC_EINVAL;
   }
   apiinfo->api.clear=(oc_setup_clear_func)th_enc_api_clear;
@@ -136,7 +136,7 @@ int theora_encode_comment(theora_comment *_tc,ogg_packet *_op){
       Presumably the application knows it is supposed to free this.
       This part works nothing like the Vorbis API, and the documentation on it
        has been wrong for some time, claiming libtheora owned the memory.*/
-    buf=_ogg_malloc(_op->bytes);
+    buf=_theora_malloc(_op->bytes);
     if(buf==NULL){
       _op->packet=NULL;
       ret=TH_EFAULT;

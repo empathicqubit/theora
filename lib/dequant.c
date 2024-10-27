@@ -55,7 +55,7 @@ int oc_quant_params_unpack(oc_pack_buf *_opb,th_quant_info *_qinfo){
   }
   val=oc_pack_read(_opb,9);
   nbase_mats=(int)val+1;
-  base_mats=_ogg_malloc(nbase_mats*sizeof(base_mats[0]));
+  base_mats=_theora_malloc(nbase_mats*sizeof(base_mats[0]));
   if(base_mats==NULL)return TH_EFAULT;
   for(bmi=0;bmi<nbase_mats;bmi++){
     for(ci=0;ci<64;ci++){
@@ -91,8 +91,8 @@ int oc_quant_params_unpack(oc_pack_buf *_opb,th_quant_info *_qinfo){
           qtj=(i-1)/3;
           plj=(i-1)%3;
         }
+        continue; // FIXME:
         *qranges=*(_qinfo->qi_ranges[qtj]+plj);
-        continue;
       }
     }
     val=oc_pack_read(_opb,nbits);
@@ -107,23 +107,23 @@ int oc_quant_params_unpack(oc_pack_buf *_opb,th_quant_info *_qinfo){
     /*Note: The caller is responsible for cleaning up any partially
        constructed qinfo.*/
     if(qi>63){
-      _ogg_free(base_mats);
+      _theora_free(base_mats);
       return TH_EBADHEADER;
     }
     qranges->nranges=qri;
-    qranges->sizes=qrsizes=(int *)_ogg_malloc(qri*sizeof(qrsizes[0]));
+    qranges->sizes=qrsizes=(int *)_theora_malloc(qri*sizeof(qrsizes[0]));
     if(qranges->sizes==NULL){
       /*Note: The caller is responsible for cleaning up any partially
          constructed qinfo.*/
-      _ogg_free(base_mats);
+      _theora_free(base_mats);
       return TH_EFAULT;
     }
     memcpy(qrsizes,sizes,qri*sizeof(qrsizes[0]));
-    qrbms=(th_quant_base *)_ogg_malloc((qri+1)*sizeof(qrbms[0]));
+    qrbms=(th_quant_base *)_theora_malloc((qri+1)*sizeof(qrbms[0]));
     if(qrbms==NULL){
       /*Note: The caller is responsible for cleaning up any partially
          constructed qinfo.*/
-      _ogg_free(base_mats);
+      _theora_free(base_mats);
       return TH_EFAULT;
     }
     qranges->base_matrices=(const th_quant_base *)qrbms;
@@ -132,14 +132,14 @@ int oc_quant_params_unpack(oc_pack_buf *_opb,th_quant_info *_qinfo){
       /*Note: The caller is responsible for cleaning up any partially
          constructed qinfo.*/
       if(bmi>=nbase_mats){
-        _ogg_free(base_mats);
+        _theora_free(base_mats);
         return TH_EBADHEADER;
       }
       memcpy(qrbms[qri],base_mats[bmi],sizeof(qrbms[qri]));
     }
     while(qri-->0);
   }
-  _ogg_free(base_mats);
+  _theora_free(base_mats);
   return 0;
 }
 
@@ -176,7 +176,7 @@ void oc_quant_params_clear(th_quant_info *_qinfo){
       }
     }
     /*Now free all the non-duplicate storage.*/
-    _ogg_free((void *)_qinfo->qi_ranges[qti][pli].sizes);
-    _ogg_free((void *)_qinfo->qi_ranges[qti][pli].base_matrices);
+    _theora_free((void *)_qinfo->qi_ranges[qti][pli].sizes);
+    _theora_free((void *)_qinfo->qi_ranges[qti][pli].base_matrices);
   }
 }

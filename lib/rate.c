@@ -340,7 +340,7 @@ void oc_rc_state_init(oc_rc_state *_rc,oc_enc_ctx *_enc){
 }
 
 void oc_rc_state_clear(oc_rc_state *_rc){
-  _ogg_free(_rc->frame_metrics);
+  _theora_free(_rc->frame_metrics);
 }
 
 void oc_enc_rc_resize(oc_enc_ctx *_enc){
@@ -390,7 +390,7 @@ void oc_enc_rc_resize(oc_enc_ctx *_enc){
       oc_frame_metrics *fm;
       int               nfm;
       int               fmh;
-      fm=(oc_frame_metrics *)_ogg_realloc(_enc->rc.frame_metrics,
+      fm=(oc_frame_metrics *)_theora_realloc(_enc->rc.frame_metrics,
        buf_delay*sizeof(*_enc->rc.frame_metrics));
       if(fm==NULL){
         /*We failed to allocate a finite buffer.*/

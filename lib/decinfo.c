@@ -123,7 +123,7 @@ static int oc_comment_unpack(oc_pack_buf *_opb,th_comment *_tc){
   /*Read the vendor string.*/
   len=oc_unpack_length(_opb);
   if(len<0||len>oc_pack_bytes_left(_opb))return TH_EBADHEADER;
-  _tc->vendor=_ogg_malloc((size_t)len+1);
+  _tc->vendor=_theora_malloc((size_t)len+1);
   if(_tc->vendor==NULL)return TH_EFAULT;
   oc_unpack_octets(_opb,_tc->vendor,len);
   _tc->vendor[len]='\0';
@@ -134,9 +134,9 @@ static int oc_comment_unpack(oc_pack_buf *_opb,th_comment *_tc){
     _tc->comments=0;
     return TH_EBADHEADER;
   }
-  _tc->comment_lengths=(int *)_ogg_malloc(
+  _tc->comment_lengths=(int *)_theora_malloc(
    _tc->comments*sizeof(_tc->comment_lengths[0]));
-  _tc->user_comments=(char **)_ogg_malloc(
+  _tc->user_comments=(char **)_theora_malloc(
    _tc->comments*sizeof(_tc->user_comments[0]));
   if(_tc->comment_lengths==NULL||_tc->user_comments==NULL){
     _tc->comments=0;
@@ -149,7 +149,7 @@ static int oc_comment_unpack(oc_pack_buf *_opb,th_comment *_tc){
       return TH_EBADHEADER;
     }
     _tc->comment_lengths[i]=len;
-    _tc->user_comments[i]=_ogg_malloc((size_t)len+1);
+    _tc->user_comments[i]=_theora_malloc((size_t)len+1);
     if(_tc->user_comments[i]==NULL){
       _tc->comments=i;
       return TH_EFAULT;
@@ -233,12 +233,12 @@ static int oc_dec_headerin(oc_pack_buf *_opb,th_info *_info,
       if(_info->frame_width==0||_tc->vendor==NULL||*_setup!=NULL){
         return TH_EBADHEADER;
       }
-      setup=(oc_setup_info *)_ogg_calloc(1,sizeof(*setup));
+      setup=(oc_setup_info *)_theora_calloc(1,sizeof(*setup));
       if(setup==NULL)return TH_EFAULT;
       ret=oc_setup_unpack(_opb,setup);
       if(ret<0){
         oc_setup_clear(setup);
-        _ogg_free(setup);
+        _theora_free(setup);
       }
       else{
         *_setup=setup;
@@ -269,6 +269,6 @@ int th_decode_headerin(th_info *_info,th_comment *_tc,
 void th_setup_free(th_setup_info *_setup){
   if(_setup!=NULL){
     oc_setup_clear(_setup);
-    _ogg_free(_setup);
+    _theora_free(_setup);
   }
 }

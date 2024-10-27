@@ -58,17 +58,17 @@ void th_comment_add(th_comment *_tc,const char *_comment){
   char **user_comments;
   int   *comment_lengths;
   int    comment_len;
-  user_comments=_ogg_realloc(_tc->user_comments,
+  user_comments=_theora_realloc(_tc->user_comments,
    (_tc->comments+2)*sizeof(*_tc->user_comments));
   if(user_comments==NULL)return;
   _tc->user_comments=user_comments;
-  comment_lengths=_ogg_realloc(_tc->comment_lengths,
+  comment_lengths=_theora_realloc(_tc->comment_lengths,
    (_tc->comments+2)*sizeof(*_tc->comment_lengths));
   if(comment_lengths==NULL)return;
   _tc->comment_lengths=comment_lengths;
   comment_len=strlen(_comment);
   comment_lengths[_tc->comments]=comment_len;
-  user_comments[_tc->comments]=_ogg_malloc(comment_len+1);
+  user_comments[_tc->comments]=_theora_malloc(comment_len+1);
   if(user_comments[_tc->comments]==NULL)return;
   memcpy(_tc->user_comments[_tc->comments],_comment,comment_len+1);
   _tc->comments++;
@@ -82,13 +82,13 @@ void th_comment_add_tag(th_comment *_tc,const char *_tag,const char *_val){
   tag_len=strlen(_tag);
   val_len=strlen(_val);
   /*+2 for '=' and '\0'.*/
-  comment=_ogg_malloc(tag_len+val_len+2);
+  comment=_theora_malloc(tag_len+val_len+2);
   if(comment==NULL)return;
   memcpy(comment,_tag,tag_len);
   comment[tag_len]='=';
   memcpy(comment+tag_len+1,_val,val_len+1);
   th_comment_add(_tc,comment);
-  _ogg_free(comment);
+  _theora_free(comment);
 }
 
 char *th_comment_query(th_comment *_tc,const char *_tag,int _count){
@@ -122,10 +122,10 @@ int th_comment_query_count(th_comment *_tc,const char *_tag){
 void th_comment_clear(th_comment *_tc){
   if(_tc!=NULL){
     long i;
-    for(i=0;i<_tc->comments;i++)_ogg_free(_tc->user_comments[i]);
-    _ogg_free(_tc->user_comments);
-    _ogg_free(_tc->comment_lengths);
-    _ogg_free(_tc->vendor);
+    for(i=0;i<_tc->comments;i++)_theora_free(_tc->user_comments[i]);
+    _theora_free(_tc->user_comments);
+    _theora_free(_tc->comment_lengths);
+    _theora_free(_tc->vendor);
     memset(_tc,0,sizeof(*_tc));
   }
 }

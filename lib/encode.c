@@ -1159,10 +1159,10 @@ static int oc_enc_init(oc_enc_ctx *_enc,const th_info *_info){
   ret=oc_state_init(&_enc->state,&info,6);
   if(ret<0)return ret;
   oc_enc_accel_init(_enc);
-  _enc->mb_info=_ogg_calloc(_enc->state.nmbs,sizeof(*_enc->mb_info));
-  _enc->frag_dc=_ogg_calloc(_enc->state.nfrags,sizeof(*_enc->frag_dc));
+  _enc->mb_info=_theora_calloc(_enc->state.nmbs,sizeof(*_enc->mb_info));
+  _enc->frag_dc=_theora_calloc(_enc->state.nfrags,sizeof(*_enc->frag_dc));
   _enc->coded_mbis=
-   (unsigned *)_ogg_malloc(_enc->state.nmbs*sizeof(*_enc->coded_mbis));
+   (unsigned *)_theora_malloc(_enc->state.nmbs*sizeof(*_enc->coded_mbis));
   hdec=!(_enc->state.info.pixel_fmt&1);
   vdec=!(_enc->state.info.pixel_fmt&2);
   /*If chroma is sub-sampled in the vertical direction, we have to encode two
@@ -1171,11 +1171,11 @@ static int oc_enc_init(oc_enc_ctx *_enc,const th_info *_info){
   mcu_nmbs=_enc->mcu_nvsbs*_enc->state.fplanes[0].nhsbs*(size_t)4;
   mcu_ncfrags=mcu_nmbs<<3-(hdec+vdec);
   mcu_nfrags=4*mcu_nmbs+mcu_ncfrags;
-  _enc->mcu_skip_ssd=(unsigned *)_ogg_malloc(
+  _enc->mcu_skip_ssd=(unsigned *)_theora_malloc(
    mcu_nfrags*sizeof(*_enc->mcu_skip_ssd));
-  _enc->mcu_rd_scale=(ogg_uint16_t *)_ogg_malloc(
+  _enc->mcu_rd_scale=(ogg_uint16_t *)_theora_malloc(
    (mcu_ncfrags>>1)*sizeof(*_enc->mcu_rd_scale));
-  _enc->mcu_rd_iscale=(ogg_uint16_t *)_ogg_malloc(
+  _enc->mcu_rd_iscale=(ogg_uint16_t *)_theora_malloc(
    (mcu_ncfrags>>1)*sizeof(*_enc->mcu_rd_iscale));
   for(pli=0;pli<3;pli++){
     _enc->dct_tokens[pli]=(unsigned char **)oc_malloc_2d(64,
@@ -1184,11 +1184,11 @@ static int oc_enc_init(oc_enc_ctx *_enc,const th_info *_info){
      _enc->state.fplanes[pli].nfrags,sizeof(**_enc->extra_bits));
   }
 #if defined(OC_COLLECT_METRICS)
-  _enc->frag_sad=_ogg_calloc(_enc->state.nfrags,sizeof(*_enc->frag_sad));
-  _enc->frag_satd=_ogg_calloc(_enc->state.nfrags,sizeof(*_enc->frag_satd));
-  _enc->frag_ssd=_ogg_calloc(_enc->state.nfrags,sizeof(*_enc->frag_ssd));
+  _enc->frag_sad=_theora_calloc(_enc->state.nfrags,sizeof(*_enc->frag_sad));
+  _enc->frag_satd=_theora_calloc(_enc->state.nfrags,sizeof(*_enc->frag_satd));
+  _enc->frag_ssd=_theora_calloc(_enc->state.nfrags,sizeof(*_enc->frag_ssd));
 #endif
-  _enc->enquant_table_data=(unsigned char *)_ogg_malloc(
+  _enc->enquant_table_data=(unsigned char *)_theora_malloc(
    (64+3)*3*2*_enc->opt_data.enquant_table_size
    +_enc->opt_data.enquant_table_alignment-1);
   _enc->keyframe_frequency_force=1<<_enc->state.info.keyframe_granule_shift;
@@ -1234,26 +1234,26 @@ static void oc_enc_clear(oc_enc_ctx *_enc){
   oc_rc_state_clear(&_enc->rc);
   oggpackB_writeclear(&_enc->opb);
   oc_quant_params_clear(&_enc->qinfo);
-  _ogg_free(_enc->enquant_table_data);
+  _theora_free(_enc->enquant_table_data);
 #if defined(OC_COLLECT_METRICS)
   /*Save the collected metrics from this run.
     Use tools/process_modedec_stats to actually generate modedec.h from the
      resulting file.*/
   oc_mode_metrics_dump();
-  _ogg_free(_enc->frag_ssd);
-  _ogg_free(_enc->frag_satd);
-  _ogg_free(_enc->frag_sad);
+  _theora_free(_enc->frag_ssd);
+  _theora_free(_enc->frag_satd);
+  _theora_free(_enc->frag_sad);
 #endif
   for(pli=3;pli-->0;){
     oc_free_2d(_enc->extra_bits[pli]);
     oc_free_2d(_enc->dct_tokens[pli]);
   }
-  _ogg_free(_enc->mcu_rd_iscale);
-  _ogg_free(_enc->mcu_rd_scale);
-  _ogg_free(_enc->mcu_skip_ssd);
-  _ogg_free(_enc->coded_mbis);
-  _ogg_free(_enc->frag_dc);
-  _ogg_free(_enc->mb_info);
+  _theora_free(_enc->mcu_rd_iscale);
+  _theora_free(_enc->mcu_rd_scale);
+  _theora_free(_enc->mcu_skip_ssd);
+  _theora_free(_enc->coded_mbis);
+  _theora_free(_enc->frag_dc);
+  _theora_free(_enc->mb_info);
   oc_state_clear(&_enc->state);
 }
 

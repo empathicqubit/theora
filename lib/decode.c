@@ -383,7 +383,7 @@ static int oc_dec_init(oc_dec_ctx *_dec,const th_info *_info,
      one byte for extra-bits for each token, plus one more byte for the long
      EOB run, just in case it's the very last token and has a run length of
      one.*/
-  _dec->dct_tokens=(unsigned char *)_ogg_malloc((64+64+1)*
+  _dec->dct_tokens=(unsigned char *)_theora_malloc((64+64+1)*
    _dec->state.nfrags*sizeof(_dec->dct_tokens[0]));
   if(_dec->dct_tokens==NULL){
     oc_huff_trees_clear(_dec->huff_tables);
@@ -428,12 +428,12 @@ static int oc_dec_init(oc_dec_ctx *_dec,const th_info *_info,
 
 static void oc_dec_clear(oc_dec_ctx *_dec){
 #if defined(HAVE_CAIRO)
-  _ogg_free(_dec->telemetry_frame_data);
+  _theora_free(_dec->telemetry_frame_data);
 #endif
-  _ogg_free(_dec->pp_frame_data);
-  _ogg_free(_dec->variances);
-  _ogg_free(_dec->dc_qis);
-  _ogg_free(_dec->dct_tokens);
+  _theora_free(_dec->pp_frame_data);
+  _theora_free(_dec->variances);
+  _theora_free(_dec->dc_qis);
+  _theora_free(_dec->dct_tokens);
   oc_huff_trees_clear(_dec->huff_tables);
   oc_state_clear(&_dec->state);
 }
@@ -1208,11 +1208,11 @@ static int oc_dec_postprocess_init(oc_dec_ctx *_dec){
   /*pp_level 0: disabled; free any memory used and return*/
   if(_dec->pp_level<=OC_PP_LEVEL_DISABLED){
     if(_dec->dc_qis!=NULL){
-      _ogg_free(_dec->dc_qis);
+      _theora_free(_dec->dc_qis);
       _dec->dc_qis=NULL;
-      _ogg_free(_dec->variances);
+      _theora_free(_dec->variances);
       _dec->variances=NULL;
-      _ogg_free(_dec->pp_frame_data);
+      _theora_free(_dec->pp_frame_data);
       _dec->pp_frame_data=NULL;
     }
     return 1;
@@ -1221,7 +1221,7 @@ static int oc_dec_postprocess_init(oc_dec_ctx *_dec){
     /*If we haven't been tracking DC quantization indices, there's no point in
        starting now.*/
     if(_dec->state.frame_type!=OC_INTRA_FRAME)return 1;
-    _dec->dc_qis=(unsigned char *)_ogg_malloc(
+    _dec->dc_qis=(unsigned char *)_theora_malloc(
      _dec->state.nfrags*sizeof(_dec->dc_qis[0]));
     if(_dec->dc_qis==NULL)return 1;
     memset(_dec->dc_qis,_dec->state.qis[0],_dec->state.nfrags);
@@ -1245,9 +1245,9 @@ static int oc_dec_postprocess_init(oc_dec_ctx *_dec){
   /*pp_level 1: Stop after updating DC quantization indices.*/
   if(_dec->pp_level<=OC_PP_LEVEL_TRACKDCQI){
     if(_dec->variances!=NULL){
-      _ogg_free(_dec->variances);
+      _theora_free(_dec->variances);
       _dec->variances=NULL;
-      _ogg_free(_dec->pp_frame_data);
+      _theora_free(_dec->pp_frame_data);
       _dec->pp_frame_data=NULL;
     }
     return 1;
@@ -1265,14 +1265,14 @@ static int oc_dec_postprocess_init(oc_dec_ctx *_dec){
        them; this simplifies allocation state management, though it may waste
        memory on the few systems that don't overcommit pages.*/
     frame_sz+=c_sz<<1;
-    _dec->pp_frame_data=(unsigned char *)_ogg_malloc(
+    _dec->pp_frame_data=(unsigned char *)_theora_malloc(
      frame_sz*sizeof(_dec->pp_frame_data[0]));
-    _dec->variances=(int *)_ogg_malloc(
+    _dec->variances=(int *)_theora_malloc(
      _dec->state.nfrags*sizeof(_dec->variances[0]));
     if(_dec->variances==NULL||_dec->pp_frame_data==NULL){
-      _ogg_free(_dec->pp_frame_data);
+      _theora_free(_dec->pp_frame_data);
       _dec->pp_frame_data=NULL;
-      _ogg_free(_dec->variances);
+      _theora_free(_dec->variances);
       _dec->variances=NULL;
       return 1;
     }
@@ -2106,7 +2106,7 @@ static void oc_render_telemetry(th_dec_ctx *_dec,th_ycbcr_buffer _ycbcr,
     I don't think anyone cares about memory usage when using telemetry; it is
      not meant for embedded devices.*/
   if(_dec->telemetry_frame_data==NULL){
-    _dec->telemetry_frame_data=_ogg_malloc(
+    _dec->telemetry_frame_data=_theora_malloc(
      (w*h+2*(w>>hdec)*(h>>vdec))*sizeof(*_dec->telemetry_frame_data));
     if(_dec->telemetry_frame_data==NULL)return;
   }

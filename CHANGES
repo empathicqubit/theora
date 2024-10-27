@@ -170,7 +170,7 @@ libtheora 1.0alpha6 (2006 May 30)
  * Merge theora-mmx simd acceleration (x86_32 and x86_64)
  * Major RTP payload specification update
  * Minor format specification updates
- * Fix some spurious calls to free() instead of _ogg_free()
+ * Fix some spurious calls to free() instead of _theora_free()
  * Fix invalid array indexing in PixelLineSearch()
  * Improve robustness against invalid input
  * General warning cleanup
